@@ -3,6 +3,15 @@ const User = require("../models/user.models");
 const Address = require("../models/address.models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const verifyToken = require("../middleware/verifyToken");
+router.get("/authcheck", verifyToken, async (req, res) => {
+	try {
+		const user = await User.findById(req.verifiedUser._id);
+		return res.status(200).json({ user: user });
+	} catch (err) {
+		return res.status(500).json({ message: err });
+	}
+});
 router.post("/login", async (req, res) => {
 	try {
 		const user = await User.findOne({ email: req.body.email });
@@ -23,7 +32,7 @@ router.post("/login", async (req, res) => {
 		);
 		return res.status(200).json({ token: token, user: user });
 	} catch (err) {
-		return res.status(500).json(err);
+		return res.status(500).json({ message: err });
 	}
 });
 router.post("/register", async (req, res) => {
@@ -50,7 +59,7 @@ router.post("/register", async (req, res) => {
 		const savedUser = await newUser.save();
 		return res.status(200).json({ user: savedUser });
 	} catch (err) {
-		return res.status(500).json(err);
+		return res.status(500).json({ message: err });
 	}
 });
 

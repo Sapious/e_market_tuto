@@ -4,6 +4,8 @@ import {
 	LOGIN_ERROR,
 	REGISTER_ERROR,
 	AUTH_ERROR,
+	USER_LOADED,
+	LOGOUT
 } from "../constants/types";
 
 const initialState = {
@@ -17,6 +19,13 @@ const initialState = {
 export default function (state = initialState, action) {
 	const { type, payload } = action;
 	switch (type) {
+		case USER_LOADED:
+			return {
+				...state,
+				isAuthenticated: true,
+				loading: false,
+				user: payload.user,
+			};
 		case LOGIN_SUCCESS:
 			localStorage.setItem("token", payload.token);
 			return {
@@ -27,6 +36,7 @@ export default function (state = initialState, action) {
 				isAuthenticated: true,
 			};
 		case LOGIN_ERROR:
+		case LOGOUT:
 			localStorage.removeItem("token");
 			return {
 				...state,
@@ -35,6 +45,7 @@ export default function (state = initialState, action) {
 				loading: false,
 				err: payload,
 			};
+
 		default:
 			return state;
 	}

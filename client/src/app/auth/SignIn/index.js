@@ -16,6 +16,7 @@ const SignIn = ({ closeModal, login }) => {
 	const onSubmitData = async (e) => {
 		e.preventDefault();
 		await login(LoginData);
+		closeModal(false);
 	};
 	const handleDataChange = (e) => {
 		setLoginData({ ...LoginData, [e.target.name]: e.target.value });
@@ -23,6 +24,7 @@ const SignIn = ({ closeModal, login }) => {
 	return (
 		<div className="fixed z-10 top-0 left-0 w-full h-full flex items-center justify-center bg-main bg-opacity-60">
 			<div ref={modalRef} className="bg-white w-1/3 relative rounded-xl p-4">
+				<div className="text-main font-bold text-2xl">Sign in</div>
 				<form onSubmit={(e) => onSubmitData(e)}>
 					<div className="flex w-full flex-col items-center justify-between gap-4 mb-6">
 						<div className="w-full">
