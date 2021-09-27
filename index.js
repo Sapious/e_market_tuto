@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const cors = require('cors')
+const cors = require("cors");
 //database connection
 mongoose.connect(process.env.MONGO_DB_URI);
 mongoose.connection.on("connected", () => {
@@ -14,13 +14,15 @@ mongoose.connection.on("error", (err) => {
 //import routes
 const productRoutes = require("./routes/product.routes");
 const authRoutes = require("./routes/auth.routes");
+const categoryRoutes = require("./routes/category.routes");
 //middlewares
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 //routes middleware
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/categories", categoryRoutes);
 //server listening
 const port = process.env.PORT || 8000;
 app.listen(port, () => {

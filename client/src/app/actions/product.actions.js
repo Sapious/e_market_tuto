@@ -7,21 +7,25 @@ import {
 	PRODUCT_ERROR,
 } from "../constants/types";
 
-export const getProducts = () => async (dispatch) => {
-	try {
-		const res = await axios.get("http://localhost:8000/api/products");
+export const getProducts =
+	(limit) =>
+	async (dispatch) => {
+		try {
+			const res = await axios.get(
+				`http://localhost:8000/api/products?limit=${limit}`
+			);
 
-		dispatch({
-			type: GET_PRODUCTS,
-			payload: res.data,
-		});
-	} catch (err) {
-		dispatch({
-			type: PRODUCT_ERROR,
-			payload: err,
-		});
-	}
-};
+			dispatch({
+				type: GET_PRODUCTS,
+				payload: res.data,
+			});
+		} catch (err) {
+			dispatch({
+				type: PRODUCT_ERROR,
+				payload: err,
+			});
+		}
+	};
 
 export const getProductsByCategory = (categoryId) => async (dispatch) => {
 	try {

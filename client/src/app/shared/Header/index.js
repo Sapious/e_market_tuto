@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SignIn from "../../auth/SignIn";
 import Register from "../../auth/Register";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-
-const Header = ({ authState }) => {
+import { getCategories } from "../../actions/category.actions";
+const Header = ({ authState, getCategories, categoryState }) => {
+	useEffect(() => {
+		getCategories(8);
+	}, []);
 	const [IsSignInOpen, setIsSignInOpen] = useState(false);
 	const [IsRegisterOpen, setIsRegisterOpen] = useState(false);
 	const handleSignInClose = (e) => {
@@ -59,24 +62,15 @@ const Header = ({ authState }) => {
 					)}
 				</div>
 				<div className="flex justify-between items-center gap-4">
-					<div className="border-b capitalize hover:border-main cursor-pointer transition-all duration-200 ease-in-out delay-300 border-solid py-4 w-1/6 text-center">
-						jewelry
-					</div>
-					<div className="border-b capitalize hover:border-main cursor-pointer transition-all duration-200 ease-in-out delay-300 border-solid py-4 w-1/6 text-center">
-						craft
-					</div>
-					<div className="border-b capitalize hover:border-main cursor-pointer transition-all duration-200 ease-in-out delay-300 border-solid py-4 w-1/6 text-center">
-						mechanic
-					</div>
-					<div className="border-b capitalize hover:border-main cursor-pointer transition-all duration-200 ease-in-out delay-300 border-solid py-4 w-1/6 text-center">
-						kitchen
-					</div>
-					<div className="border-b capitalize hover:border-main cursor-pointer transition-all duration-200 ease-in-out delay-300 border-solid py-4 w-1/6 text-center">
-						food
-					</div>
-					<div className="border-b capitalize hover:border-main cursor-pointer transition-all duration-200 ease-in-out delay-300 border-solid py-4 w-1/6 text-center">
-						food
-					</div>
+					{categoryState.categories.map((category) => {
+						return (
+							<div
+								key={category._id}
+								className="border-b capitalize hover:border-main cursor-pointer transition-all duration-200 ease-in-out delay-300 border-solid py-4 w-1/6 text-center">
+								{category.name}
+							</div>
+						);
+					})}
 				</div>
 			</div>
 		</header>
@@ -84,11 +78,16 @@ const Header = ({ authState }) => {
 };
 Header.propTypes = {
 	authState: PropTypes.object.isRequired,
+	getCategories: PropTypes.func.isRequired,
+	categoryState: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
 	authState: state.authState,
+	categoryState: state.categoryState,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+	getCategories,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

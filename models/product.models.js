@@ -15,6 +15,7 @@ const ProductSchema = new mongoose.Schema(
 		description: { type: String, maxlength: 1024 },
 		price: { type: Number, min: 0 },
 		seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+		category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
 	},
 	{
 		timestamps: true,
