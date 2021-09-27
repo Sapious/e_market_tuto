@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
+import RecentProduct from "../../shared/RecentProduct";
+import { getProducts } from "../../actions/product.actions";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
-const Home = () => {
+const Home = ({ getProducts, productState }) => {
+	useEffect(() => {
+		getProducts();
+	}, []);
 	return (
 		<div>
 			<div className="bg-warning">
@@ -20,8 +27,30 @@ const Home = () => {
 					})}
 				</div>
 			</div>
+			<div className="grid grid-cols-5 gap-4 mt-32">
+				{productState.products.map((product) => {
+					return (
+						<RecentProduct
+							key={product._id}
+							image={product.image}
+							price={product.price}
+						/>
+					);
+				})}
+			</div>
 		</div>
 	);
 };
+Home.propTypes = {
+	getProducts: PropTypes.func.isRequired,
+	productState: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => ({
+	productState: state.productState,
+});
 
-export default Home;
+const mapDispatchToProps = {
+	getProducts,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

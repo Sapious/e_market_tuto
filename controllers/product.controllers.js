@@ -1,11 +1,25 @@
 const Product = require("../models/product.models");
 
 const getProducts = async (req, res) => {
+	const category = req.query.category ? req.query.category : null;
 	try {
-		const products = await Product.find().populate({
-			select: "firstName lastName",
-			path: "seller",
-		});
+		const products = [];
+		if (category) {
+			products = await Product.find({ category: category })
+				.populate({
+					select: "firstName lastName",
+					path: "seller",
+				})
+				.sort("-createdAt");
+		} else {
+			products = await Product.find()
+				.populate({
+					select: "firstName lastName",
+					path: "seller",
+				})
+				.sort("-createdAt");
+		}
+
 		return res.status(200).json({ products: products });
 	} catch (err) {
 		return res.status(500).json({ message: err });
