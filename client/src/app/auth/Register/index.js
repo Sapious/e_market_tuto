@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import { useClickAway } from "react-use";
 import { register } from "../../actions/auth.actions";
 import { connect } from "react-redux";
-
-const Register = ({ closeModal, register }) => {
+import Spinner from "../../shared/Spinner";
+const Register = ({ closeModal, register, authState }) => {
 	const modalRef = useRef(null);
 	const [RegisterData, setRegisterData] = useState({
 		email: "",
@@ -27,7 +27,9 @@ const Register = ({ closeModal, register }) => {
 	const handleDataChange = (e) => {
 		setRegisterData({ ...RegisterData, [e.target.name]: e.target.value });
 	};
-	return (
+	return authState.loading ? (
+		<Spinner />
+	) : (
 		<div className="fixed z-10 top-0 left-0 w-full h-full flex items-center justify-center bg-main bg-opacity-60">
 			<div ref={modalRef} className="bg-white w-1/3 relative rounded-xl p-4">
 				<div className="text-main font-bold text-2xl">Register</div>
@@ -141,8 +143,11 @@ const Register = ({ closeModal, register }) => {
 Register.propTypes = {
 	register: PropTypes.func.isRequired,
 	closeModal: PropTypes.func.isRequired,
+	authState: PropTypes.object.isRequired,
 };
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+	authState: state.authState,
+});
 
 const mapDispatchToProps = {
 	register,

@@ -6,6 +6,7 @@ import {
 	AUTH_ERROR,
 	USER_LOADED,
 	LOGOUT,
+	AUTH_LOADING,
 } from "../constants/types";
 
 const initialState = {
@@ -19,6 +20,11 @@ const initialState = {
 export default function (state = initialState, action) {
 	const { type, payload } = action;
 	switch (type) {
+		case AUTH_LOADING:
+			return {
+				...state,
+				loading: true,
+			};
 		case USER_LOADED:
 			return {
 				...state,

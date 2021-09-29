@@ -36,6 +36,15 @@ const getProducts = async (req, res) => {
 		return res.status(500).json({ message: err });
 	}
 };
+
+const getOwnedProducts = async (req, res) => {
+	try {
+		const products = await Product.find({ seller: req.verifiedUser._id });
+		return res.status(200).json({ products: products });
+	} catch (err) {
+		return res.status(500).json({ message: err });
+	}
+};
 const getProduct = async (req, res) => {
 	const id = req.params.productId;
 
@@ -58,9 +67,10 @@ const getProductBySlug = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
+	// TODO fix in prod
 	const newProduct = new Product({
 		name: req.body.name,
-		image: req.body.image,
+		image: req.protocol + "://" + req.hostname + ":8000" + "/" + req.file.path,
 		description: req.body.description,
 		price: req.body.price,
 		seller: req.verifiedUser._id,
@@ -112,10 +122,26 @@ const updateProduct = async (req, res) => {
 		return res.status(500).json({ message: err });
 	}
 };
-// TODO: delete of products
+
+const deleteProduct = async (req, res) => {
+	const id = req.params.productId;
+	let deletedProduct = null;
+	try {
+		const product = await Product.findById(id);
+		if (product.seller.toString() === req.verifiedUser._id) {
+			deletedProduct = await Product.findByIdAndDelete(id);
+		}
+
+		return res.status(200).json({ product: deletedProduct });
+	} catch (err) {
+		return res.status(500).json({ message: err });
+	}
+};
 module.exports.getProducts = getProducts;
 module.exports.getProduct = getProduct;
 module.exports.getProductBySlug = getProductBySlug;
 module.exports.createProduct = createProduct;
 module.exports.searchProduct = searchProduct;
 module.exports.updateProduct = updateProduct;
+module.exports.getOwnedProducts = getOwnedProducts;
+module.exports.deleteProduct = deleteProduct;

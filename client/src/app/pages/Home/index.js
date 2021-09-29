@@ -4,11 +4,14 @@ import { getProducts } from "../../actions/product.actions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-const Home = ({ getProducts, productState, categoryState }) => {
+import Spinner from "../../shared/Spinner";
+const Home = ({ getProducts, productState, categoryState, authState }) => {
 	useEffect(() => {
 		getProducts(10);
 	}, []);
-	return (
+	return productState.loading && categoryState.loading && authState.loading ? (
+		<Spinner />
+	) : (
 		<div>
 			<div className="bg-warning">
 				<h1 className="text-6xl text-center py-4">
@@ -52,10 +55,12 @@ Home.propTypes = {
 	getProducts: PropTypes.func.isRequired,
 	productState: PropTypes.object.isRequired,
 	categoryState: PropTypes.object.isRequired,
+	authState: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
 	productState: state.productState,
 	categoryState: state.categoryState,
+	authState: state.authState,
 });
 
 const mapDispatchToProps = {

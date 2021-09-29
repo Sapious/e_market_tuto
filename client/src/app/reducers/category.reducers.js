@@ -1,4 +1,8 @@
-import { GET_CATEGORIES, CATEGORY_ERROR } from "../constants/types";
+import {
+	GET_CATEGORIES,
+	CATEGORY_ERROR,
+	CATEGORY_LOADING,
+} from "../constants/types";
 
 const initialState = {
 	categories: [],
@@ -10,6 +14,11 @@ const initialState = {
 export default function (state = initialState, action) {
 	const { type, payload } = action;
 	switch (type) {
+		case CATEGORY_LOADING:
+			return {
+				...state,
+				loading: true,
+			};
 		case GET_CATEGORIES:
 			return {
 				...state,
@@ -19,6 +28,7 @@ export default function (state = initialState, action) {
 		case CATEGORY_ERROR:
 			return {
 				...state,
+				loading: false,
 				error: payload,
 			};
 		default:

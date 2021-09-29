@@ -5,12 +5,16 @@ import {
 	REGISTER_ERROR,
 	AUTH_ERROR,
 	USER_LOADED,
-	LOGOUT
+	LOGOUT,
+	AUTH_LOADING,
 } from "../constants/types";
 import setAuthToken from "../utils/setAuthToken";
 import axios from "axios";
 
 export const loadUser = () => async (dispatch) => {
+	dispatch({
+		type: AUTH_LOADING,
+	});
 	if (localStorage.token) {
 		setAuthToken(localStorage.getItem("token"));
 	}
@@ -29,6 +33,9 @@ export const loadUser = () => async (dispatch) => {
 };
 
 export const login = (data) => async (dispatch) => {
+	dispatch({
+		type: AUTH_LOADING,
+	});
 	const config = {
 		headers: {
 			"Content-Type": "application/json",
@@ -53,6 +60,9 @@ export const login = (data) => async (dispatch) => {
 	}
 };
 export const register = (data) => async (dispatch) => {
+	dispatch({
+		type: AUTH_LOADING,
+	});
 	const config = {
 		headers: {
 			"Content-Type": "application/json",
@@ -76,7 +86,6 @@ export const register = (data) => async (dispatch) => {
 		});
 	}
 };
-export const logout = () => dispatch => {
-
-	dispatch({type: LOGOUT})
-}
+export const logout = () => (dispatch) => {
+	dispatch({ type: LOGOUT });
+};
