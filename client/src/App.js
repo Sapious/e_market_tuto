@@ -10,6 +10,7 @@ import setAuthToken from "./app/utils/setAuthToken";
 import { loadUser } from "./app/actions/auth.actions";
 import { LOGOUT } from "./app/constants/types";
 import SellerRoute from "./app/routing/SellerRoute";
+import ProductDetails from './app/pages/ProductDetails';
 function App() {
 	useEffect(() => {
 		if (localStorage.token) {
@@ -34,6 +35,7 @@ function App() {
 						component={SellerProducts}
 					/>
 					<Route exact path="/search" component={Search} />
+					<Route exact path="/products/:productId" component={ProductDetails}/>
 				</Switch>
 			</Router>
 		</Provider>

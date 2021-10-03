@@ -1,5 +1,6 @@
 const Product = require("../models/product.models");
 const Category = require("../models/category.models");
+const User = require("../models/user.models");
 const getProducts = async (req, res) => {
 	const category = req.query.category ? req.query.category : null;
 	const limit = req.query.limit ? parseInt(req.query.limit) : 100;
@@ -49,7 +50,10 @@ const getProduct = async (req, res) => {
 	const id = req.params.productId;
 
 	try {
-		const product = await Product.findById(id);
+		const product = await Product.findById(id).populate({
+			path: "seller",
+			select: "firstName lastName",
+		});
 		return res.status(200).json({ product: product });
 	} catch (err) {
 		return res.status(500).json({ message: err });
@@ -61,6 +65,18 @@ const getProductBySlug = async (req, res) => {
 	try {
 		const product = await Product.findOne({ slug: slug });
 		return res.status(200).json({ product: product });
+	} catch (err) {
+		return res.status(500).json({ message: err });
+	}
+};
+
+const getSellerNumber = async (req, res) => {
+	const sellerId = req.params.sellerId;
+
+	try {
+		const seller = await User.findById(sellerId).select("phoneNumber");
+
+		return res.status(200).json({ seller: seller });
 	} catch (err) {
 		return res.status(500).json({ message: err });
 	}
@@ -93,12 +109,16 @@ const searchProduct = async (req, res) => {
 	if (categoryQuery) {
 		category = await Category.findOne({ slug: categoryQuery });
 	}
+	const query = {
+		category: category,
+		name: { $regex: `.*${q}.*` },
+		price: { $gte: minPrice, $lte: maxPrice },
+	};
+	if (!query.category) {
+		delete query["category"];
+	}
 	try {
-		const products = await Product.find({
-			category: category?._id,
-			name: { $regex: `.*${q}.*` },
-			price: { $gte: minPrice, $lte: maxPrice },
-		});
+		const products = await Product.find(query);
 		return res.status(200).json({ products: products });
 	} catch (err) {
 		return res.status(500).json({ message: err });
@@ -108,6 +128,12 @@ const searchProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
 	const id = req.params.productId;
 	const data = { ...req.body };
+	if (req.file) {
+		data.image =
+			req.protocol + "://" + req.hostname + ":8000" + "/" + req.file.path;
+	} else {
+		delete data["image"];
+	}
 	try {
 		const product = await Product.findById(id);
 		if (product.seller.toString() === req.verifiedUser._id) {
@@ -145,3 +171,4 @@ module.exports.searchProduct = searchProduct;
 module.exports.updateProduct = updateProduct;
 module.exports.getOwnedProducts = getOwnedProducts;
 module.exports.deleteProduct = deleteProduct;
+module.exports.getSellerNumber = getSellerNumber;

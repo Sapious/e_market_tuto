@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { createProduct } from "../../actions/product.actions";
+import { createProduct, updateProduct } from "../../actions/product.actions";
 import { useClickAway } from "react-use";
 import { connect } from "react-redux";
 import { getCategories } from "../../actions/category.actions";
@@ -8,19 +8,22 @@ import PropTypes from "prop-types";
 const ProductForm = ({
 	closeModal,
 	createProduct,
+	updateProduct,
 	getCategories,
 	categoryState,
+	method,
+	data,
 }) => {
 	useEffect(() => {
 		getCategories(10);
 	}, []);
 	const modalRef = useRef(null);
 	const [ProductData, setProductData] = useState({
-		name: "",
-		image: "",
-		description: "",
-		price: "",
-		category: "",
+		name: data.name ? data.name : "",
+		image: data.image ? data.image : "",
+		description: data.description ? data.description : "",
+		price: data.price ? data.price : "",
+		category: data.category ? data.category : "",
 	});
 	const [ProductFile, setProductFile] = useState(null);
 	useClickAway(modalRef, () => {
@@ -42,7 +45,11 @@ const ProductForm = ({
 		formData.append("price", ProductData.price);
 		formData.append("category", ProductData.category);
 		formData.append("image", ProductFile);
-		await createProduct(formData);
+		if (method === "post") {
+			await createProduct(formData);
+		} else {
+			await updateProduct(formData, data._id);
+		}
 		closeModal(false);
 	};
 	return (
@@ -69,7 +76,6 @@ const ProductForm = ({
 								name="image"
 								className="w-full border-black rounded focus:outline-none border-solid border py-2 px-4"
 								placeholder="Image"
-								value={ProductData.image}
 							/>
 						</div>
 						<div className="w-full">
@@ -108,7 +114,9 @@ const ProductForm = ({
 									</option>
 									{categoryState.categories.map((cat) => {
 										return (
-											<option className="capitalize" value={cat._id}>
+											<option
+												className="capitalize"
+												value={cat._id}>
 												{cat.name}
 											</option>
 										);
@@ -133,6 +141,9 @@ ProductForm.propTypes = {
 	categoryState: PropTypes.object.isRequired,
 	getCategories: PropTypes.func.isRequired,
 	createProduct: PropTypes.func.isRequired,
+	method: PropTypes.string.isRequired,
+	updateProduct: PropTypes.func.isRequired,
+	data: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
 	categoryState: state.categoryState,
@@ -140,6 +151,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
 	createProduct,
+	updateProduct,
 	getCategories,
 };
 

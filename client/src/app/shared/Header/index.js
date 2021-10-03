@@ -17,6 +17,7 @@ const Header = ({ authState, getCategories, categoryState, logout }) => {
 	const [IsSignInOpen, setIsSignInOpen] = useState(false);
 	const [IsRegisterOpen, setIsRegisterOpen] = useState(false);
 	const [isProductFormOpen, setIsProductFormOpen] = useState(false);
+	const [SearchQuery, setSearchQuery] = useState("");
 	const handleSignInClose = (e) => {
 		setIsSignInOpen(e);
 		setIsRegisterOpen(e);
@@ -37,11 +38,15 @@ const Header = ({ authState, getCategories, categoryState, logout }) => {
 					</Link>
 					<div className="focus-within:bg-main rounded-full focus-within:ring focus-within:ring-minor focus-within:ring-offset-2 transition-all duration-200 ease-in-out w-8/12">
 						<input
+							onChange={(e) => setSearchQuery(e.target.value)}
+							value={SearchQuery}
 							className="border-2 border-r-0 border-solid border-main py-2 pl-4 pr-10 rounded-l-full focus:outline-none w-11/12"
 							type="text"
 							placeholder="search for something"
 						/>
-						<button className="border-main border-2 border-l-0 hover:bg-gray-100 focus:bg-main py-2 px-6 rounded-r-full transition-all duration-200 ease-in-out w-1/12">
+						<button
+							onClick={(e) => history.push(`/search?q=${SearchQuery}`)}
+							className="border-main border-2 border-l-0 hover:bg-gray-100 focus:bg-main py-2 px-6 rounded-r-full transition-all duration-200 ease-in-out w-1/12">
 							<i class="fas fa-search text-minor"></i>
 						</button>
 					</div>
@@ -104,17 +109,21 @@ const Header = ({ authState, getCategories, categoryState, logout }) => {
 						<Register closeModal={(e) => handleSignInClose(e)} />
 					)}
 					{isProductFormOpen && (
-						<ProductForm closeModal={(e) => handleProductFormClose(e)} />
+						<ProductForm
+							method="post"
+							closeModal={(e) => handleProductFormClose(e)}
+						/>
 					)}
 				</div>
 				<div className="flex justify-between items-center gap-4">
 					{categoryState.categories.map((category) => {
 						return (
-							<div
+							<Link
+								to={`/search?category=${category.name}`}
 								key={category._id}
 								className="border-b capitalize hover:border-main cursor-pointer transition-all duration-200 ease-in-out delay-300 border-solid py-4 w-1/6 text-center">
 								{category.name}
-							</div>
+							</Link>
 						);
 					})}
 				</div>

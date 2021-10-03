@@ -14,15 +14,7 @@ const SellerProducts = ({ productState, getOwnedProducts }) => {
 	) : (
 		<div className="grid grid-cols-5 gap-8">
 			{productState.products.map((product) => {
-				return (
-					<SellerItem
-						key={product._id}
-						productId={product._id}
-						name={product.name}
-						image={product.image}
-						price={product.price}
-					/>
-				);
+				return <SellerItem key={product._id} data={product} />;
 			})}
 		</div>
 	);

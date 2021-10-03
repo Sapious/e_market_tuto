@@ -41,6 +41,7 @@ const Home = ({ getProducts, productState, categoryState, authState }) => {
 				{productState.products.map((product) => {
 					return (
 						<RecentProduct
+							id={product._id}
 							key={product._id}
 							image={product.image}
 							price={product.price}

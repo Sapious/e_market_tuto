@@ -8,6 +8,9 @@ import {
 	PRODUCT_LOADING,
 	GET_OWNED_PRODUCTS,
 	DELETE_PRODUCT,
+	FILTER_PRODUCT,
+	UPDATE_PRODUCT,
+	GET_PRODUCT_SELLER_NUMBER,
 } from "../constants/types";
 
 export const createProduct = (data) => async (dispatch) => {
@@ -28,6 +31,33 @@ export const createProduct = (data) => async (dispatch) => {
 
 		dispatch({
 			type: CREATE_PRODUCT,
+			payload: res.data,
+		});
+	} catch (err) {
+		dispatch({
+			type: PRODUCT_ERROR,
+			payload: err,
+		});
+	}
+};
+export const updateProduct = (data, productId) => async (dispatch) => {
+	dispatch({
+		type: PRODUCT_LOADING,
+	});
+	const config = {
+		headers: {
+			"Content-Type": "application/json",
+		},
+	};
+	try {
+		const res = await axios.put(
+			`http://localhost:8000/api/products/${productId}`,
+			data,
+			config
+		);
+
+		dispatch({
+			type: UPDATE_PRODUCT,
 			payload: res.data,
 		});
 	} catch (err) {
@@ -128,6 +158,51 @@ export const deleteProduct = (productId) => async (dispatch) => {
 
 		dispatch({
 			type: DELETE_PRODUCT,
+			payload: res.data,
+		});
+	} catch (err) {
+		dispatch({
+			type: PRODUCT_ERROR,
+			payload: err,
+		});
+	}
+};
+
+export const filterProduct = (query) => async (dispatch) => {
+	dispatch({
+		type: PRODUCT_LOADING,
+	});
+	let queryString = "?";
+	query.forEach((value, key) => {
+		queryString += key + "=" + value + "&";
+	});
+
+	try {
+		const res = await axios.get(
+			`http://localhost:8000/api/products/search${queryString}`
+		);
+		dispatch({
+			type: FILTER_PRODUCT,
+			payload: res.data,
+		});
+	} catch (err) {
+		dispatch({
+			type: PRODUCT_ERROR,
+			payload: err,
+		});
+	}
+};
+
+export const getSellerNumber = (sellerId) => async (dispatch) => {
+	dispatch({
+		type: PRODUCT_LOADING,
+	});
+	try {
+		const res = await axios.get(
+			`http://localhost:8000/api/products/seller/${sellerId}/number`
+		);
+		dispatch({
+			type: GET_PRODUCT_SELLER_NUMBER,
 			payload: res.data,
 		});
 	} catch (err) {

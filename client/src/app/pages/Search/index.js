@@ -1,57 +1,45 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useQuery } from "../../hooks";
 import SearchProduct from "../../shared/SearchProduct";
-const Search = () => {
+import { filterProduct } from "../../actions/product.actions";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import Spinner from "../../shared/Spinner";
+
+const Search = ({ filterProduct, productState }) => {
 	const query = useQuery();
-	return (
-		<div>
-			<div>this is {query.get("category")}</div>
+	useEffect(() => {
+		filterProduct(query);
+	}, [query.get("q"), query.get("category")]);
+
+	return productState.loading ? (
+		<Spinner />
+	) : (
+		<div className="pb-20">
 			<div className="grid grid-cols-4 gap-4">
-				<SearchProduct
-					image={
-						"https://images.unsplash.com/photo-1555664424-778a1e5e1b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxfDB8MXxhbGx8fHx8fHx8fA&ixlib=rb-1.2.1&q=80&w=1080&utm_source=unsplash_source&utm_medium=referral&utm_campaign=api-credit"
-					}
-					name={"test"}
-					price={20}
-				/>
-				<SearchProduct
-					image={
-						"https://images.unsplash.com/photo-1555664424-778a1e5e1b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxfDB8MXxhbGx8fHx8fHx8fA&ixlib=rb-1.2.1&q=80&w=1080&utm_source=unsplash_source&utm_medium=referral&utm_campaign=api-credit"
-					}
-					name={"test"}
-					price={20}
-				/>
-				<SearchProduct
-					image={
-						"https://images.unsplash.com/photo-1555664424-778a1e5e1b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxfDB8MXxhbGx8fHx8fHx8fA&ixlib=rb-1.2.1&q=80&w=1080&utm_source=unsplash_source&utm_medium=referral&utm_campaign=api-credit"
-					}
-					name={"test"}
-					price={20}
-				/>
-				<SearchProduct
-					image={
-						"https://images.unsplash.com/photo-1555664424-778a1e5e1b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxfDB8MXxhbGx8fHx8fHx8fA&ixlib=rb-1.2.1&q=80&w=1080&utm_source=unsplash_source&utm_medium=referral&utm_campaign=api-credit"
-					}
-					name={"test"}
-					price={20}
-				/>
-				<SearchProduct
-					image={
-						"https://images.unsplash.com/photo-1555664424-778a1e5e1b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxfDB8MXxhbGx8fHx8fHx8fA&ixlib=rb-1.2.1&q=80&w=1080&utm_source=unsplash_source&utm_medium=referral&utm_campaign=api-credit"
-					}
-					name={"test"}
-					price={20}
-				/>
-				<SearchProduct
-					image={
-						"https://images.unsplash.com/photo-1555664424-778a1e5e1b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxfDB8MXxhbGx8fHx8fHx8fA&ixlib=rb-1.2.1&q=80&w=1080&utm_source=unsplash_source&utm_medium=referral&utm_campaign=api-credit"
-					}
-					name={"test"}
-					price={20}
-				/>
+				{productState.products.map((product) => {
+					return (
+						<SearchProduct
+							image={product.image}
+							name={product.name}
+							price={product.price}
+						/>
+					);
+				})}
 			</div>
 		</div>
 	);
 };
+Search.propTypes = {
+	productState: PropTypes.object.isRequired,
+	filterProduct: PropTypes.func.isRequired,
+};
+const mapStateToProps = (state) => ({
+	productState: state.productState,
+});
 
-export default Search;
+const mapDispatchToProps = {
+	filterProduct,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Search);

@@ -7,6 +7,9 @@ import {
 	GET_OWNED_PRODUCTS,
 	PRODUCT_LOADING,
 	DELETE_PRODUCT,
+	FILTER_PRODUCT,
+	GET_PRODUCT_SELLER_NUMBER,
+	UPDATE_PRODUCT,
 } from "../constants/types";
 
 const initialState = {
@@ -19,6 +22,36 @@ const initialState = {
 export default function (state = initialState, action) {
 	const { type, payload } = action;
 	switch (type) {
+		case UPDATE_PRODUCT:
+			const indexProduct = state.products
+				.map((product) => {
+					return product._id;
+				})
+				.indexOf(payload.product._id);
+			let updatedProduct = state.products[indexProduct];
+			updatedProduct = payload.product;
+			return {
+				...state,
+				products: [
+					...state.products.filter(
+						(product) => product._id !== payload.product._id
+					),
+					updatedProduct,
+				],
+				loading: false,
+			};
+		case GET_PRODUCT_SELLER_NUMBER:
+			return {
+				...state,
+				product: {
+					...state.product,
+					seller: {
+						...state.product.seller,
+						phoneNumber: payload.seller.phoneNumber,
+					},
+				},
+				loading: false,
+			};
 		case CREATE_PRODUCT:
 			return {
 				...state,
@@ -31,6 +64,12 @@ export default function (state = initialState, action) {
 				loading: true,
 			};
 		case GET_OWNED_PRODUCTS:
+			return {
+				...state,
+				products: payload.products,
+				loading: false,
+			};
+		case FILTER_PRODUCT:
 			return {
 				...state,
 				products: payload.products,
@@ -51,7 +90,7 @@ export default function (state = initialState, action) {
 		case GET_PRODUCT:
 			return {
 				...state,
-				product: payload.products,
+				product: payload.product,
 				loading: false,
 			};
 		case DELETE_PRODUCT:
