@@ -25,6 +25,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use(express.static("./build"));
 app.use("*", (req, res) => {
 	res.sendFile(path.resolve("build", "index.html"));
 });
