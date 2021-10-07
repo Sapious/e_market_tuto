@@ -19,11 +19,11 @@ const ProductForm = ({
 	}, [getCategories]);
 	const modalRef = useRef(null);
 	const [ProductData, setProductData] = useState({
-		name: data.name ? data.name : "",
-		image: data.image ? data.image : "",
-		description: data.description ? data.description : "",
-		price: data.price ? data.price : "",
-		category: data.category ? data.category : "",
+		name: data?.name ? data.name : "",
+		image: data?.image ? data.image : "",
+		description: data?.description ? data.description : "",
+		price: data?.price ? data.price : "",
+		category: data?.category ? data.category : "",
 	});
 	const [ProductFile, setProductFile] = useState(null);
 	useClickAway(modalRef, () => {
