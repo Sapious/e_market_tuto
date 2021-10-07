@@ -51,7 +51,7 @@ const Header = ({ authState, getCategories, categoryState, logout }) => {
 						</button>
 					</div>
 
-					{authState.isAuthenticated && (
+					{authState.isAuthenticated && authState.user.isSeller && (
 						<div
 							onClick={(e) => setIsProductFormOpen(true)}
 							className="hover:bg-gray-100 text-gray-800 focus:bg-gray-200 p-3 w-12 h-12 flex cursor-pointer justify-center items-center rounded-full transition-all duration-200 ease-in-out text-lg font-semibold text-center whitespace-nowrap">
