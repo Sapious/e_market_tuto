@@ -8,13 +8,18 @@ import SellerItem from "../../shared/SellerItem";
 const SellerProducts = ({ productState, getOwnedProducts }) => {
 	useEffect(() => {
 		getOwnedProducts();
-	}, []);
+	}, [getOwnedProducts]);
 	return productState.loading ? (
 		<Spinner />
 	) : (
 		<div className="grid grid-cols-5 gap-8">
 			{productState.products.map((product) => {
-				return <SellerItem key={product._id} data={product} />;
+				return (
+					<SellerItem
+						key={product._id}
+						data={product}
+					/>
+				);
 			})}
 		</div>
 	);

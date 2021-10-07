@@ -24,7 +24,6 @@ router.get("/:productId", productControllers.getProduct);
 router.get(
 	"/seller/:sellerId/number",
 	verifyToken,
-	phoneNumberRequest,
 	productControllers.getSellerNumber
 );
 router.post(

@@ -24,7 +24,7 @@ export const createProduct = (data) => async (dispatch) => {
 	};
 	try {
 		const res = await axios.post(
-			`http://localhost:8000/api/products/`,
+			`/api/products/`,
 			data,
 			config
 		);
@@ -51,7 +51,7 @@ export const updateProduct = (data, productId) => async (dispatch) => {
 	};
 	try {
 		const res = await axios.put(
-			`http://localhost:8000/api/products/${productId}`,
+			`/api/products/${productId}`,
 			data,
 			config
 		);
@@ -72,7 +72,7 @@ export const getOwnedProducts = () => async (dispatch) => {
 		type: PRODUCT_LOADING,
 	});
 	try {
-		const res = await axios.get(`http://localhost:8000/api/products/me`);
+		const res = await axios.get(`/api/products/me`);
 
 		dispatch({
 			type: GET_OWNED_PRODUCTS,
@@ -92,7 +92,7 @@ export const getProducts = (limit) => async (dispatch) => {
 	});
 	try {
 		const res = await axios.get(
-			`http://localhost:8000/api/products?limit=${limit}`
+			`/api/products?limit=${limit}`
 		);
 
 		dispatch({
@@ -113,7 +113,7 @@ export const getProductsByCategory = (categoryId) => async (dispatch) => {
 	});
 	try {
 		const res = await axios.get(
-			`http://localhost:8000/api/products?category=${categoryId}`
+			`/api/products?category=${categoryId}`
 		);
 
 		dispatch({
@@ -133,7 +133,7 @@ export const getProduct = (productId) => async (dispatch) => {
 	});
 	try {
 		const res = await axios.get(
-			`http://localhost:8000/api/products/${productId}`
+			`/api/products/${productId}`
 		);
 
 		dispatch({
@@ -153,7 +153,7 @@ export const deleteProduct = (productId) => async (dispatch) => {
 	});
 	try {
 		const res = await axios.delete(
-			`http://localhost:8000/api/products/${productId}`
+			`/api/products/${productId}`
 		);
 
 		dispatch({
@@ -179,7 +179,7 @@ export const filterProduct = (query) => async (dispatch) => {
 
 	try {
 		const res = await axios.get(
-			`http://localhost:8000/api/products/search${queryString}`
+			`/api/products/search${queryString}`
 		);
 		dispatch({
 			type: FILTER_PRODUCT,
@@ -199,7 +199,7 @@ export const getSellerNumber = (sellerId) => async (dispatch) => {
 	});
 	try {
 		const res = await axios.get(
-			`http://localhost:8000/api/products/seller/${sellerId}/number`
+			`/api/products/seller/${sellerId}/number`
 		);
 		dispatch({
 			type: GET_PRODUCT_SELLER_NUMBER,

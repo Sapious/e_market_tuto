@@ -118,7 +118,7 @@ const searchProduct = async (req, res) => {
 		delete query["category"];
 	}
 	try {
-		const products = await Product.find(query);
+		const products = await Product.find(query).populate({path:"seller", select:"firstName lastName"});
 		return res.status(200).json({ products: products });
 	} catch (err) {
 		return res.status(500).json({ message: err });

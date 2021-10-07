@@ -10,7 +10,7 @@ export const getCategories = (limit) => async (dispatch) => {
 	});
 	try {
 		const res = await axios.get(
-			`http://localhost:8000/api/categories?limit=${limit}`
+			`/api/categories?limit=${limit}`
 		);
 
 		dispatch({

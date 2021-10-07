@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");
 //database connection
 mongoose.connect(process.env.MONGO_DB_URI);
 mongoose.connection.on("connected", () => {
@@ -20,10 +21,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 //routes middleware
-app.use('/uploads', express.static("uploads"))
+app.use("/uploads", express.static("uploads"));
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("*", (req, res) => {
+	res.sendFile(path.resolve("build", "index.html"));
+});
 //server listening
 const port = process.env.PORT || 8000;
 app.listen(port, () => {

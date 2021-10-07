@@ -16,7 +16,7 @@ const ProductForm = ({
 }) => {
 	useEffect(() => {
 		getCategories(10);
-	}, []);
+	}, [getCategories]);
 	const modalRef = useRef(null);
 	const [ProductData, setProductData] = useState({
 		name: data.name ? data.name : "",

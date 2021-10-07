@@ -10,6 +10,7 @@ const Search = ({ filterProduct, productState }) => {
 	const query = useQuery();
 	useEffect(() => {
 		filterProduct(query);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query.get("q"), query.get("category")]);
 
 	return productState.loading ? (
@@ -20,6 +21,9 @@ const Search = ({ filterProduct, productState }) => {
 				{productState.products.map((product) => {
 					return (
 						<SearchProduct
+							key={product._id}
+							seller={product.seller}
+							id={product._id}
 							image={product.image}
 							name={product.name}
 							price={product.price}

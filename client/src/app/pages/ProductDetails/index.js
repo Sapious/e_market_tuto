@@ -8,7 +8,7 @@ const ProductDetails = ({ productState, getProduct, getSellerNumber }) => {
 	const { productId } = useParams();
 	useEffect(() => {
 		getProduct(productId);
-	}, [productId]);
+	}, [getProduct, productId]);
 	return productState.loading ? (
 		<Spinner />
 	) : (

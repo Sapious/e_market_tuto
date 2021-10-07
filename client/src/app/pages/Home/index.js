@@ -8,7 +8,7 @@ import Spinner from "../../shared/Spinner";
 const Home = ({ getProducts, productState, categoryState, authState }) => {
 	useEffect(() => {
 		getProducts(10);
-	}, []);
+	}, [getProducts]);
 	return productState.loading && categoryState.loading && authState.loading ? (
 		<Spinner />
 	) : (

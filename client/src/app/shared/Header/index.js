@@ -12,7 +12,7 @@ const Header = ({ authState, getCategories, categoryState, logout }) => {
 	let history = useHistory();
 	useEffect(() => {
 		getCategories(8);
-	}, []);
+	}, [getCategories]);
 	const [isDropOpen, setIsDropOpen] = useState(false);
 	const [IsSignInOpen, setIsSignInOpen] = useState(false);
 	const [IsRegisterOpen, setIsRegisterOpen] = useState(false);
@@ -47,7 +47,7 @@ const Header = ({ authState, getCategories, categoryState, logout }) => {
 						<button
 							onClick={(e) => history.push(`/search?q=${SearchQuery}`)}
 							className="border-main border-2 border-l-0 hover:bg-gray-100 focus:bg-main py-2 px-6 rounded-r-full transition-all duration-200 ease-in-out w-1/12">
-							<i class="fas fa-search text-minor"></i>
+							<i className="fas fa-search text-minor"></i>
 						</button>
 					</div>
 
@@ -55,7 +55,7 @@ const Header = ({ authState, getCategories, categoryState, logout }) => {
 						<div
 							onClick={(e) => setIsProductFormOpen(true)}
 							className="hover:bg-gray-100 text-gray-800 focus:bg-gray-200 p-3 w-12 h-12 flex cursor-pointer justify-center items-center rounded-full transition-all duration-200 ease-in-out text-lg font-semibold text-center whitespace-nowrap">
-							<i class="fas fa-plus"></i>
+							<i className="fas fa-plus"></i>
 						</div>
 					)}
 					{!authState.isAuthenticated ? (
