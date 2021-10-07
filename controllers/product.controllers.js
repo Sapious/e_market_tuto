@@ -83,10 +83,16 @@ const getSellerNumber = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
-	// TODO fix in prod
+	let imageUrl = "";
+	if (req.hostname === "localhost") {
+		imageUrl =
+			req.protocol + "://" + req.hostname + ":8000" + "/" + req.file.path;
+	} else {
+		imageUrl = req.protocol + "://" + req.hostname + "/" + req.file.path;
+	}
 	const newProduct = new Product({
 		name: req.body.name,
-		image: req.protocol + "://" + req.hostname + ":8000" + "/" + req.file.path,
+		image: imageUrl,
 		description: req.body.description,
 		price: req.body.price,
 		seller: req.verifiedUser._id,
@@ -118,7 +124,10 @@ const searchProduct = async (req, res) => {
 		delete query["category"];
 	}
 	try {
-		const products = await Product.find(query).populate({path:"seller", select:"firstName lastName"});
+		const products = await Product.find(query).populate({
+			path: "seller",
+			select: "firstName lastName",
+		});
 		return res.status(200).json({ products: products });
 	} catch (err) {
 		return res.status(500).json({ message: err });
@@ -129,8 +138,12 @@ const updateProduct = async (req, res) => {
 	const id = req.params.productId;
 	const data = { ...req.body };
 	if (req.file) {
-		data.image =
-			req.protocol + "://" + req.hostname + ":8000" + "/" + req.file.path;
+		if (req.hostname === "localhost") {
+			data.image =
+				req.protocol + "://" + req.hostname + ":8000" + "/" + req.file.path;
+		} else {
+			imageUrl = req.protocol + "://" + req.hostname + "/" + req.file.path;
+		}
 	} else {
 		delete data["image"];
 	}
